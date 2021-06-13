@@ -79,6 +79,9 @@ Plug 'mhinz/vim-startify'
 " Easialy rename files using :Rename filename newfilename
 Plug 'danro/rename.vim'
 
+" Markdown Preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
 " JS TS and react highlight
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
