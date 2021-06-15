@@ -1,5 +1,14 @@
 #!/bin/bash
 
+install_homebrew() {
+  printf "installing Homebrew\n"
+
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  printf "Homebrew instalation finished\n"
+}
+
+
 restore_brew() {
   # install things throug brew
   echo "Installing Brew bundle"
@@ -58,10 +67,44 @@ install_elixir_ls() {
   echo "elixirLS was installed"
 }
 
+install_oh_my_zsh() {
+  printf "Installing OhMyZSH\n"
+  
+  mv .zshrc .zshrc.bkp
+
+  brew install zsh
+  chsh -s /usr/local/bin/zsh
+
+  rm -rf .zshrc
+  mv .zshrc.bkp .zshrc
+  
+  printf "OhMyZSH instalation finished\n"
+}
+
+install_powerlevel10k() {
+  printf "Installing terminal theme POWERLEVEL10K\n"
+  "git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+
+  printf "POWERLEVEL10K instalation finished\n"
+}
+
+install_vim_plug() {
+  printf "Installing the amazing Vim Plug\n"
+
+  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+  printf "Vim Plug was installed"
+}
+
 echo "Hello, we will start to setup your new mac :)"
 
+install_homebrew
 restore_brew
+install_powerlevel10k
 install_asdf_tools
 install_elixir_ls
+install_vim_plug
+install_oh_my_zsh
 
 echo "Your mac is ready to be used, enjoy"
