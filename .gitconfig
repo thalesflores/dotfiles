@@ -3,21 +3,26 @@
 #	name = Thales Flores
 #	email = thalesvflores@gmail.com
 [user]
-	name = thalesflores
+	name = Thales Flores
 	email = thalesvflores@gmail.com
 	user = thalesflores
 
 [alias]
   hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  force-push = commit --amend && git push -f
+
 [core]
 	editor = nvim
+
 [color]
 	ui = true
+
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
+
 [color "diff"]
 	meta = 11
 	frag = magenta bold
@@ -25,6 +30,7 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+
 [push]
 	default = current
 

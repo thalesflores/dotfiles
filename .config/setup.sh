@@ -70,22 +70,44 @@ install_elixir_ls() {
 install_oh_my_zsh() {
   printf "Installing OhMyZSH\n"
   
-  mv .zshrc .zshrc.bkp
+  mv "$HOME/.zshrc" "$HOME/.zshrc.bkp"
 
   brew install zsh
   chsh -s /usr/local/bin/zsh
 
-  rm -rf .zshrc
-  mv .zshrc.bkp .zshrc
+  rm -rf "$HOME/.zshrc"
+  mv "$HOME/.zshrc.bkp" "$HOME/.zshrc"
   
   printf "OhMyZSH instalation finished\n"
 }
 
 install_powerlevel10k() {
   printf "Installing terminal theme POWERLEVEL10K\n"
-  "git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
-  printf "POWERLEVEL10K instalation finished\n"
+  if [[ -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]]; then
+    printf "POWERLEVEL10K already installed, skipping this step"
+
+  else 
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+
+    printf "POWERLEVEL10K instalation finished\n"
+  fi
+}
+
+install_zsh_tools() {
+
+  printf "Installing ZSH plugins\n"
+
+  # autosuggestions
+  git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+
+  # auto completions
+  git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:=$HOME/.oh-my-zsh/custom}/plugins/zsh-completions"
+
+  # syntax highlighting
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+
+  printf "ZSH plugins installed\n"
 }
 
 install_vim_plug() {
@@ -101,10 +123,12 @@ echo "Hello, we will start to setup your new mac :)"
 
 install_homebrew
 restore_brew
-install_powerlevel10k
-install_asdf_tools
-install_elixir_ls
-install_vim_plug
 install_oh_my_zsh
+install_powerlevel10k
+install_zsh_tools
+# install_asdf_tools
+# install_elixir_ls
+install_vim_plug
+
 
 echo "Your mac is ready to be used, enjoy"
