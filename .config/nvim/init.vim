@@ -20,7 +20,7 @@ Plug 'dense-analysis/ale'
 
 " ElixirLS
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'amiralies/coc-elixir', {'do': 'yarn install && yarn prepack'}
+Plug 'amiralies/coc-elixir', {'do': 'yarn install && yarn prepack'}
 
 " Run tests
 Plug 'vim-test/vim-test'
@@ -81,6 +81,11 @@ Plug 'danro/rename.vim'
 
 " Markdown Preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
+" Quickly navigation among Elixir files
+Plug 'tpope/vim-projectionist'
+Plug 'c-brenn/fuzzy-projectionist.vim'
+Plug 'andyl/vim-projectionist-elixir'
 
 " JS TS and react highlight
 Plug 'pangloss/vim-javascript'
@@ -324,6 +329,21 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#branch#enabled=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" projectionist config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Elixir switch between test and code file
+let g:projectionist_heuristics = {
+    \      "lib/*.ex": {
+    \        "alternate": "test/{}_test.exs",
+    \        "type": "src"
+    \      }	,
+    \      "test/*_test.ex": {
+    \        "alternate": "lib/{}.exs",
+    \        "type": "src"
+    \      }	
+    \ }
 
 " js highlight config
 let g:javascript_plugin_jsdoc = 1

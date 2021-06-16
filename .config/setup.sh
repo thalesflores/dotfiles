@@ -49,6 +49,14 @@ restore_dotfiles() {
 }
 
 install_asdf_tools() {
+  echo "Installing ASDF plugins"
+
+ for plugin in $(cut -d' ' -f1 "$HOME/.tool-versions"); do
+   echo "Installing plugin to $plugin"
+
+   asdf plugin add "$plugin"
+ done
+
   echo "Installing tools via ASDF"
 
   asdf install
@@ -58,9 +66,12 @@ install_asdf_tools() {
 
 install_elixir_ls() {
   echo "Cloning and installing elixirLS"
+  elixirls="$HOME/.elixir-ls"
 
-  git clone https://github.com/elixir-lsp/elixir-ls.git ~/.elixir-ls
-  cd ~/.elixir-ls || return
+  if [[ -d "$elixirls" ]]; then rm -rf "$elixirls"; fi 
+
+  git clone https://github.com/elixir-lsp/elixir-ls.git "$elixirls "  
+  cd "$elixirls" || return
   mix deps.get && mix compile && mix elixir_ls.release -o release
   cd ~ || return
 
@@ -119,6 +130,15 @@ install_vim_plug() {
   printf "Vim Plug was installed"
 }
 
+install_tmux_tpm() {
+
+  echo "Installing Tmux package manager..."
+
+  git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+
+  echo "... Tmux package manager was installed"
+}
+
 echo "Hello, we will start to setup your new mac :)"
 
 install_homebrew
@@ -126,9 +146,10 @@ restore_brew
 install_oh_my_zsh
 install_powerlevel10k
 install_zsh_tools
-# install_asdf_tools
-# install_elixir_ls
+install_asdf_tools
+install_elixir_ls
 install_vim_plug
+install_tmux_tpm
 
 
 echo "Your mac is ready to be used, enjoy"
