@@ -70,10 +70,10 @@ install_elixir_ls() {
 
   if [[ -d "$elixirls" ]]; then rm -rf "$elixirls"; fi 
 
-  git clone https://github.com/elixir-lsp/elixir-ls.git "$elixirls "  
+  git clone https://github.com/elixir-lsp/elixir-ls.git "$elixirls"
   cd "$elixirls" || return
   mix deps.get && mix compile && mix elixir_ls.release -o release
-  cd ~ || return
+  cd "$HOME" || return
 
   echo "elixirLS was installed"
 }
