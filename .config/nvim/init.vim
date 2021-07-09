@@ -162,8 +162,13 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Linter setup
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:ale_fixers  = {'elixir': ['mix_format'], 'ruby': ['standardrb']}
 let g:ale_fixers  = {'elixir': ['mix_format']}
-let g:ale_linters = {'elixir': ['elixir-ls']}
+let g:ale_linters = {
+  \ 'elixir': ['elixir-ls'], 
+  \ 'ruby': ['rubocop'], 
+  \ 'javascript': ['eslint'],
+  \ }
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
@@ -302,7 +307,7 @@ endif
 let g:test#strategy = 'neovim'
 
 " Remap ESC to not close the test window.
-" tnoremap <Esc> <C-\><C-n>
+tnoremap <Esc> <C-\><C-n>
 
 " Thanks to remap above it's need to remap ESC to close FZF.
 "au TermOpen * tnoremap <Esc> <c-\><c-n>
