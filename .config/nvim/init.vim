@@ -50,6 +50,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" highlight when use y
+Plug 'machakann/vim-highlightedyank'
 
 " Display Indentation line
 Plug 'Yggdroot/indentLine'
@@ -153,6 +155,29 @@ set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
+" config Y to copy till end of the line
+nnoremap Y y$
+
+" keeping the cursor in the screen cender when searching/cocant
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap J mzJ`z
+
+" move lines up/down
+nnoremap <C-k> :m .-2<CR>==
+nnoremap <C-j> :m .+1<CR>==
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+
+" Copy relative path
+nnoremap <leader>fr :let @+ = expand("%")<CR>
+
+" Copy full path
+nnoremap <leader>fp :let @+ = expand("%:p")<CR>
+
+" Copy  file name
+nnoremap <leader>fn :let @+ = expand("%:t")<CR>
+
 " coc global
 let g:coc_global_extensions = ['coc-elixir', 'coc-diagnostic']
 
@@ -172,6 +197,8 @@ let g:ale_linters = {
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
+" using credo elixir
+let g:ale_elixir_credo_strict = 1
 
 " spaces instead of tab
 set tabstop=2 shiftwidth=2 expandtab
