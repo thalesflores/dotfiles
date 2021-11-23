@@ -1,3 +1,11 @@
 {
-  "elixir.pathToElixirLS": "~/.elixir-ls/release/language_server.sh"
+  "elixir.pathToElixirLS": "~/.elixir-ls/1.12-otp24/language_server.sh",
+
+  "solargraph.diagnostics": true,
+  "solargraph.autoformat": true,
+  "solargraph.formatting": true,
+  "solargraph.hover": true,
+
+  "eslint.packageManager": "yarn",
+  "eslint.nodePath": ".yarn/sdks"
 }

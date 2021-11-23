@@ -50,19 +50,9 @@ function code {
     fi
 }
 
-# export PATH="$PATH:$HOME/.elixir-ls/release"
-
 if (( ! ${fpath[(I)/usr/local/share/zsh/site-functions]} )); then
   FPATH=/usr/local/share/zsh/site-functions:$FPATH
 fi
-
-# fzf config
-FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude deps/ --exclude _build/ --exclude .elixir*'
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# SET asdf
-. /usr/local/opt/asdf/asdf.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -73,4 +63,13 @@ fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
+export PATH="/usr/local/sbin:$PATH"
 
+. $HOME/.asdf/asdf.sh
+
+export PATH=$PATH:/usr/local/sbin
+
+# fzf config
+FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude deps/ --exclude _build/ --exclude .elixir --exclude .git'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

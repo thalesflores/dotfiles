@@ -105,10 +105,10 @@ au FocusGained,BufEnter * checktime
 " window split commands
 """"""""""""""""""""""""""""""""
 " Create a vertical split
-nmap <leader>wv :vsplit<CR><C-w>l
+nmap <leader>w\ :vsplit<CR><C-w>l
 
 " Create a horizontal split
-nmap <leader>ws :split<CR><C-w>j
+nmap <leader>w- :split<CR><C-w>j
 
 
 if has("nvim")
@@ -126,7 +126,6 @@ set incsearch
 
 " Show line number
 set cursorline
-"set cursorcolumn
 
 " show identention
 set listchars=tab:\|\ 
@@ -337,9 +336,9 @@ let g:test#strategy = 'neovim'
 tnoremap <Esc> <C-\><C-n>
 
 " Thanks to remap above it's need to remap ESC to close FZF.
-"au TermOpen * tnoremap <Esc> <c-\><c-n>
-"au FileType fzf tunmap <Esc>
-"let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+au TermOpen * tnoremap <Esc> <c-\><c-n>
+au FileType fzf tunmap <Esc>
+" let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
 let g:test#preserve_screen = 1
 let g:test#filename_modifier = ":."
@@ -360,6 +359,15 @@ nmap <silent> <leader>tv :TestVisit<CR>
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#branch#enabled=1
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" esearch
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Open the search window in a vertical split and reuse it for all further searches.
+let g:esearch = {}
+let g:esearch.name = '[esearch]'
+let g:esearch.win_new = {esearch -> esearch#buf#goto_or_open(esearch.name, 'vnew')}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
