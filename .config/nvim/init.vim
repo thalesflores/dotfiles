@@ -93,7 +93,16 @@ Plug 'andyl/vim-projectionist-elixir'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'maxmellon/vim-jsx-pretty'
+
+
+" Database plugs
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
+
 call plug#end()
+
+
 
 " Doesn't show search highlights
 "set nohlsearch
@@ -384,6 +393,15 @@ let g:projectionist_heuristics = {
     \        "type": "src"
     \      }	
     \ }
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Database plug config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <silent> <leader>du :DBUIToggle<CR>
+nnoremap <silent> <leader>df :DBUIFindBuffer<CR>
+nnoremap <silent> <leader>dr :DBUIRenameBuffer<CR>
+nnoremap <silent> <leader>dl :DBUILastQueryInfo<CR>
+let g:db_ui_save_location = '~/.config/nvim/db_ui'
 
 " js highlight config
 let g:javascript_plugin_jsdoc = 1
