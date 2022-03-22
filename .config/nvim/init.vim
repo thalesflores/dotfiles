@@ -105,7 +105,7 @@ call plug#end()
 
 
 " Doesn't show search highlights
-"set nohlsearch
+set nohlsearch
 
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -151,7 +151,7 @@ set showmatch
 " Add a bit extra margin to the left
 set foldcolumn=1
 
-set updatetime=300
+set updatetime=200
 
 " No annoying sound on errors
 set noerrorbells
@@ -289,8 +289,6 @@ let g:mix_format_on_save = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => COC Setup 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Doesn't show search highlights
-set nohlsearch
 "GoTo code navigation
 nmap <leader>g <C-o>
 nmap <silent> gd <Plug>(coc-definition)

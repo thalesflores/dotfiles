@@ -30,14 +30,22 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # use vim in terminal
 set -o vi
 
+# Yank to the system clipboard
+function vi-yank-clipboard {
+    zle vi-yank
+   echo -n "$CUTBUFFER" | pbcopy -i
+}
+
+zle -N vi-yank-clipboard
+bindkey -M vicmd 'y' vi-yank-clipboard
+
 # ASDF export config
-# . $HOME/.asdf/asdf.sh
+. $HOME/.asdf/asdf.sh
 #
-# . $HOME/.asdf/completions/asdf.bash
+. $HOME/.asdf/completions/asdf.bash
 
 # kep iex history in different session
 export ERL_AFLAGS="-kernel shell_history enabled"
-
 
 function code {
     if [[ $# = 0 ]]
