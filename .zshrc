@@ -8,6 +8,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # PLUGINS 
 plugins=(
+  zsh-vi-mode
   zsh-autosuggestions
   zsh-completions
   git
@@ -15,11 +16,15 @@ plugins=(
   zsh-syntax-highlighting
 )
 
+# config autosuggestions color
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#696969,bold"
+
 source "$ZSH/oh-my-zsh.sh"
 
 export EDITOR='nvim'
 
 ####### ALIAS #############
+
 alias mf="mix format"
 alias vim="nvim"
 # set lsd package as ls default
@@ -30,7 +35,7 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # use vim in terminal
 set -o vi
 
-# Yank to the system clipboard
+# Yank to the system clipboard without using zsh-vi-mode
 function vi-yank-clipboard {
     zle vi-yank
    echo -n "$CUTBUFFER" | pbcopy -i
@@ -38,6 +43,8 @@ function vi-yank-clipboard {
 
 zle -N vi-yank-clipboard
 bindkey -M vicmd 'y' vi-yank-clipboard
+#######################################################
+
 
 # ASDF export config
 . $HOME/.asdf/asdf.sh
@@ -46,6 +53,8 @@ bindkey -M vicmd 'y' vi-yank-clipboard
 
 # kep iex history in different session
 export ERL_AFLAGS="-kernel shell_history enabled"
+# compile new versions of erlang with docs
+export KERL_BUILD_DOCS="yes"
 
 function code {
     if [[ $# = 0 ]]
@@ -74,10 +83,25 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export PATH="/usr/local/sbin:$PATH"
 
 . $HOME/.asdf/asdf.sh
+# [ -s "/Users/thalesflores/.nvm/nvm.sh" ] && . "/Users/thalesflores/.nvm/nvm.sh"
+
 
 export PATH=$PATH:/usr/local/sbin
 
 # fzf config
 FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude deps/ --exclude _build/ --exclude .elixir --exclude .git'
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# function that enables fzf in zsh-vi-mode, it is called after the plugin initiation
+function zsh_vi_init() {
+  # enable fzh 
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+}
+
+# this function overwrite the de default one, enabling to yank to clipboard when using zsh_vi_mode
+function zvm_vi_yank() {
+	zvm_yank
+	echo ${CUTBUFFER} | pbcopy
+	zvm_exit_visual_mode
+}
+
+zvm_after_init_commands+=(zsh_vi_init)
