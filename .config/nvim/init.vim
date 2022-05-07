@@ -60,8 +60,10 @@ Plug 'Yggdroot/indentLine'
 Plug 'bogado/file-line'
 
 " file finder
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Plug 'junegunn/fzf.vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " search
 Plug 'eugen0329/vim-esearch'
@@ -221,6 +223,8 @@ set guifont=Fira\ Code:h18
 " autocomplete with ctrl+space
 inoremap <silent><expr> <C-space> coc#refresh()
 
+nnoremap <silent> <C-y>  :<C-u>CocList -A --normal yank<cr>
+
 " map completion to use <c+j>/<c+k>
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
@@ -241,14 +245,23 @@ endfunction
 command! ProjectFiles execute 'Files' s:find_git_root()
 
 " Use <Leader>. to start searching always from project directory.
-nnoremap <silent> <leader>. :ProjectFiles<cr>
+" nnoremap <silent> <leader>. :ProjectFiles<cr>
+" Find files using Telescope command-line sugar. The commands are using Lua
+nnoremap <leader>. <cmd>lua require('telescope.builtin').find_files()<cr>
+noremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+" List buffers
+nnoremap <leader>bb <cmd>lua require('telescope.builtin').buffers()<cr>
+" Searches for the string under your cursor in your current working directory
+nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Buffer config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use <leader>bb to show buffer list
-nnoremap <silent> <leader>bb :Buffers<cr>
+" nnoremap <silent> <leader>bb :Buffers<cr>
 
 " previous and next buffers
 nnoremap <silent> <leader>b] :bnext<cr>
