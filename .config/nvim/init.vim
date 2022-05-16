@@ -26,7 +26,9 @@ Plug 'amiralies/coc-elixir', {'do': 'yarn install && yarn prepack'}
 Plug 'vim-test/vim-test'
 
 " elixir highlight
-Plug 'elixir-editors/vim-elixir'
+" Plug 'elixir-editors/vim-elixir'
+" highlight langs
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Smart auto-complete and works nice with alchemist
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -413,6 +415,36 @@ nnoremap <silent> <leader>df :DBUIFindBuffer<CR>
 nnoremap <silent> <leader>dr :DBUIRenameBuffer<CR>
 nnoremap <silent> <leader>dl :DBUILastQueryInfo<CR>
 let g:db_ui_save_location = '~/.config/nvim/db_ui'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tree Sitter config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "elixir", "eex", "heex", "erlang", "lua", "javascript", "typescript", "vim" },
+
+  highlight = {
+    enable = true,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+
+  indent = {
+    enable = true
+  }
+}
+EOF
+
+" Set fold
+" set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
 
 " js highlight config
 let g:javascript_plugin_jsdoc = 1
