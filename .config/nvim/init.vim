@@ -274,6 +274,11 @@ map <leader>bk :bd<cr>
 
 " Close all the buffers
 map <leader>bK :bufdo bd<cr>
+"
+" Close all other buffers
+command Bd :up | %bd | e#
+nmap <leader>bo :Bd<cr>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " show ruler in the editor
