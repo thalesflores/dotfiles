@@ -13,6 +13,7 @@ plugins=(
   zsh-completions
   git
   fzf
+  asdf
   zsh-syntax-highlighting
 )
 
@@ -45,27 +46,10 @@ zle -N vi-yank-clipboard
 bindkey -M vicmd 'y' vi-yank-clipboard
 #######################################################
 
-
-# ASDF export config
-. $HOME/.asdf/asdf.sh
-#
-. $HOME/.asdf/completions/asdf.bash
-
 # kep iex history in different session
 export ERL_AFLAGS="-kernel shell_history enabled"
 # compile new versions of erlang with docs
 export KERL_BUILD_DOCS="yes"
-
-function code {
-    if [[ $# = 0 ]]
-    then
-        open -a "Visual Studio Code"
-    else
-        local argPath="$1"
-        [[ $1 = /* ]] && argPath="$1" || argPath="$PWD/${1#./}"
-        open -a "Visual Studio Code" "$argPath"
-    fi
-}
 
 if (( ! ${fpath[(I)/usr/local/share/zsh/site-functions]} )); then
   FPATH=/usr/local/share/zsh/site-functions:$FPATH
@@ -81,10 +65,6 @@ fi
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
 export PATH="/usr/local/sbin:$PATH"
-
-. $HOME/.asdf/asdf.sh
-# [ -s "/Users/thalesflores/.nvm/nvm.sh" ] && . "/Users/thalesflores/.nvm/nvm.sh"
-
 
 export PATH=$PATH:/usr/local/sbin
 
