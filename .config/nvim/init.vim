@@ -86,7 +86,8 @@ Plug 'mhinz/vim-startify'
 Plug 'danro/rename.vim'
 
 " Markdown Preview
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'ellisonleao/glow.nvim'
 
 " Quickly navigation among Elixir files
 Plug 'tpope/vim-projectionist'
@@ -98,7 +99,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
-
 
 " Database plugs
 Plug 'tpope/vim-dadbod'
@@ -444,11 +444,17 @@ require'nvim-treesitter.configs'.setup {
     enable = true
   }
 }
+
+-- Configuring the fold to use the treesitter
+local vim = vim
+local opt = vim.opt
+
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
 EOF
 
-" Set fold
-" set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+" avoiding all files starting folded.
+autocmd BufReadPost,FileReadPost * normal zR
 
 
 " js highlight config
