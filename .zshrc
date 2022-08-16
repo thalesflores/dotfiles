@@ -13,7 +13,6 @@ plugins=(
   zsh-completions
   git
   fzf
-  asdf
   zsh-syntax-highlighting
 )
 
@@ -24,6 +23,9 @@ source "$ZSH/oh-my-zsh.sh"
 
 export EDITOR='nvim'
 
+# importing commands and alias that are used by leav
+[[ -f ~/.leav_bash_req ]] && source ~/.leav_bash_req
+
 ####### ALIAS #############
 
 alias mf="mix format"
@@ -31,10 +33,14 @@ alias vim="nvim"
 # set lsd package as ls default
 alias ls="lsd"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias good_morning='~/.scripts/new_journal_entry.sh'
 ##############################
 
 # use vim in terminal
 set -o vi
+
+# asdf
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 # Yank to the system clipboard without using zsh-vi-mode
 function vi-yank-clipboard {
@@ -85,3 +91,12 @@ function zvm_vi_yank() {
 }
 
 zvm_after_init_commands+=(zsh_vi_init)
+
+export PATH="/usr/local/opt/libpq/bin:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/thalesflores/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/thalesflores/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/thalesflores/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/thalesflores/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
