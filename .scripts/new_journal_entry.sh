@@ -6,16 +6,16 @@ FULL_FILE="$ROOT_PATH/$FILE_NAME.md"
 
 [[ ! -d  $ROOT_PATH ]] && mkdir $ROOT_PATH
 
-if [[ ! -f  $ROOT_PATH/$FILE_NAME ]]; then
+if [[ ! -f  $FULL_FILE ]]; then
   cat > "$FULL_FILE" <<EOL
-  # $FILE_NAME
+# $FILE_NAME
 
-  ## TODO
-  - []
+## TODO
+- []
 
-  ## Happenings
+## Happenings
 
-  ## For tomorrow
+## For tomorrow
 EOL
 fi
 
