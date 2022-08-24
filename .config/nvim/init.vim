@@ -11,6 +11,8 @@ set clipboard+=unnamed
 set number
 set relativenumber
 
+set mouse=a
+
 call plug#begin('~/.vim/plugged')
 " Color schema
 Plug 'joshdick/onedark.vim'
@@ -106,8 +108,6 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 
 call plug#end()
 
-
-
 " Doesn't show search highlights
 set nohlsearch
 
@@ -153,7 +153,7 @@ set whichwrap+=<,>,h,l
 set showmatch
 
 " Add a bit extra margin to the left
-set foldcolumn=1
+set foldcolumn=0
 
 set updatetime=200
 
@@ -454,7 +454,7 @@ opt.foldexpr = "nvim_treesitter#foldexpr()"
 EOF
 
 " avoiding all files starting folded.
-autocmd BufReadPost,FileReadPost * normal zR
+autocmd BufNewFile,BufRead,BufReadPost,FileReadPost,BufEnter,InsertEnter,InsertLeave,WinEnter * normal zR
 
 
 " js highlight config
