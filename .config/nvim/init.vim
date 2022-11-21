@@ -13,9 +13,12 @@ set relativenumber
 
 set mouse=a
 
+let g:indentLine_setConceal = 0
+
 call plug#begin('~/.vim/plugged')
 " Color schema
-Plug 'joshdick/onedark.vim'
+"Plug 'joshdick/onedark.vim'
+Plug 'shaunsingh/nord.nvim'
 
 " autoformat
 Plug 'dense-analysis/ale'
@@ -27,8 +30,6 @@ Plug 'amiralies/coc-elixir', {'do': 'yarn install && yarn prepack'}
 " Run tests
 Plug 'vim-test/vim-test'
 
-" elixir highlight
-" Plug 'elixir-editors/vim-elixir'
 " highlight langs
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
@@ -50,6 +51,12 @@ Plug 'jiangmiao/auto-pairs'
 " Git wrapper
 Plug 'tpope/vim-fugitive'
 
+" See git commit messages easy
+Plug 'rhysd/git-messenger.vim'
+
+" Restore session along with tmux-ressurect
+Plug 'tpope/vim-obsession'
+
 " custom info bar
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -68,6 +75,8 @@ Plug 'bogado/file-line'
 " Plug 'junegunn/fzf.vim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+" Todo highligth and list
+Plug 'folke/todo-comments.nvim'
 
 " search
 Plug 'eugen0329/vim-esearch'
@@ -89,6 +98,7 @@ Plug 'danro/rename.vim'
 
 " Markdown Preview
 " Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 Plug 'ellisonleao/glow.nvim'
 
 " Quickly navigation among Elixir files
@@ -102,7 +112,10 @@ Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 
-" Database plugs
+"autoclose tags
+"Plug 'windwp/nvim-ts-autotag'
+
+"Database plugs
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
 
@@ -217,7 +230,7 @@ set tabstop=2 shiftwidth=2 expandtab
 
 " Color schema
 set termguicolors
-colorscheme onedark
+colorscheme nord
 
 " set fira code |> 
 set guifont=Fira\ Code:h18
@@ -383,6 +396,7 @@ nmap <silent> <leader>tv :TestVisit<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " airline config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:airline_theme='base16_ashes'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#branch#enabled=1
 
@@ -432,6 +446,7 @@ require'nvim-treesitter.configs'.setup {
 
   highlight = {
     enable = true,
+    use_languagetree = true,
 
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
@@ -446,18 +461,38 @@ require'nvim-treesitter.configs'.setup {
 }
 
 -- Configuring the fold to use the treesitter
-local vim = vim
-local opt = vim.opt
-
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- local vim = vim
+-- local opt = vim.opt
+-- 
+-- vim.opt.foldmethod = 'expr'
+-- vim.opt.foldexpr   = 'nvim_treesitter#foldexpr()'
+-- 
+-- vim.cmd([[ autocmd BufRead,BufEnter,InsertLeave,BufWinEnter * normal zR ]])
 EOF
 
-" avoiding all files starting folded.
-autocmd BufNewFile,BufRead,BufReadPost,FileReadPost,BufEnter,InsertEnter,InsertLeave,WinEnter * normal zR
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TODO comments config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+lua << EOF
+  require("todo-comments").setup { }
+EOF
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Git messenger config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" when run <Leader> + gm focus go to the pop-up always
+let g:git_messenger_always_into_popup=v:true
+" Show margins in the pop-up
+let g:git_messenger_floating_win_opts = { 'border': 'single' }
+let g:git_messenger_popup_content_margins = v:false
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " js highlight config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:javascript_plugin_jsdoc = 1
 let g:javascript_plugin_ngdoc = 1
 let g:javascript_plugin_flow = 1
