@@ -12,6 +12,8 @@ plugins=(
   zsh-autosuggestions
   zsh-completions
   git
+  asdf
+  docker
   fzf
   zsh-syntax-highlighting
 )
