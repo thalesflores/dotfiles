@@ -1,10 +1,11 @@
 {
-  "elixir.pathToElixirLS": "~/.elixir-ls/releases/language_server.sh",
+  "elixir.pathToElixirLS": "~/.elixir-ls/release/language_server.sh",
 
   "solargraph.diagnostics": true,
   "solargraph.autoformat": true,
   "solargraph.formatting": true,
   "solargraph.hover": true,
 
-  "eslint.autoFixOnSave": true
+  "eslint.autoFixOnSave": true,
+
 }

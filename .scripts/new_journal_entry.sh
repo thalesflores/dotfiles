@@ -11,6 +11,11 @@ if [[ ! -f  $FULL_FILE ]]; then
 # $FILE_NAME
 
 ## TODO
+
+### Work
+- []
+
+### Personal
 - []
 
 ## Happenings
