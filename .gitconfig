@@ -4,8 +4,9 @@
 #	email = thalesvflores@gmail.com
 [user]
 	name = Thales Flores
-	email = thalesvflores@gmail.com
+	email = 22772984+thalesflores@users.noreply.github.com
 	user = thalesflores
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDC/JuytaQGdM+ZNZkDNfWn+/Kyc6bK5AezpUQkcZjsI
 
 [alias]
   hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
@@ -39,5 +40,15 @@
 
 [init]
 	defaultBranch = main
+
 [merge]
 	conflictstyle = diff3
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+  gpgsign = true
