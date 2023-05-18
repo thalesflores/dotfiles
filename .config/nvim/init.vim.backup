@@ -1,5 +1,18 @@
 syntax on
 
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = "\<SPACE>"
+let g:mapleader = "\<SPACE>"
+
+" Copy to clipboard from vim by default
+set clipboard+=unnamed
+
+set number
+set relativenumber
+
+set mouse=a
+
 " Save with :W too cause I am dumb and use it all the time
 nmap :W :w 
 
@@ -124,9 +137,11 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 
 call plug#end()
 
-lua require('options')
+" Doesn't show search highlights
+set nohlsearch
 
 " Set to auto read when a file is changed from the outside
+set autoread
 au FocusGained,BufEnter * checktime
 """"""""""""""""""""""""""""""""
 " window split commands
@@ -138,6 +153,10 @@ nmap <leader>w\ :vsplit<CR><C-w>l
 nmap <leader>w- :split<CR><C-w>j
 
 
+if has("nvim")
+  set inccommand=nosplit
+endif
+
 """"""""""""""""""""""""""""""""
 " set spell commands
 """"""""""""""""""""""""""""""""
@@ -145,8 +164,45 @@ nmap <C-s>o :set spell spelllang=en_us<CR>
 nmap <C-s>f :set nospell<CR>
 """"""""""""""""""""""""""""""""
 
-"set t_vb=
-"
+"Always show current position
+set ruler
+
+" Ignore case when searching
+set ignorecase
+
+" Makes search act like search in modern browsers
+set incsearch
+
+" Show line number
+set cursorline
+
+" show identention
+" set listchars=tab:\|\ 
+" set lcs+=space:·
+set list
+
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" Show matching brackets when text indicator is over them
+set showmatch
+
+" Add a bit extra margin to the left
+set foldcolumn=0
+
+set updatetime=200
+
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+
+set ai "Auto indent
+set si "Smart indent
+set wrap "Wrap lines
+
 " config Y to copy till end of the line
 nnoremap Y y$
 
@@ -191,6 +247,16 @@ let g:ale_linters = {
 let g:ale_fix_on_save = 1
 " using credo elixir
 let g:ale_elixir_credo_strict = 1
+
+" spaces instead of tab
+set tabstop=2 shiftwidth=2 expandtab
+
+" Color schema
+set termguicolors
+colorscheme nord
+
+" set fira code |> 
+set guifont=Fira\ Code:h18
 
 " autocomplete with ctrl+space
 inoremap <silent><expr> <C-space> coc#refresh()
@@ -264,9 +330,23 @@ nmap <leader>bo :Bd<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" show ruler in the editor
+set colorcolumn=98
+highlight ColorColumn guibg=DarkGray
+
+
+" Always show the status line
+set laststatus=2
 
 " Return to last edit position when opening files
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" set undo history
+set undofile
+set undodir=~/.vim/undo
+
+" number of undo saved
+set undolevels=500 
 
 " multiple selector select all
 let g:multi_cursor_select_all_word_key = '<C-S-l>'
@@ -426,7 +506,7 @@ require'nvim-treesitter.configs'.setup {
 -- vim.opt.foldmethod = 'expr'
 -- vim.opt.foldexpr   = 'nvim_treesitter#foldexpr()'
 -- 
--- vim.cmd [[ autocmd BufRead,BufEnter,InsertLeave,BufWinEnter * normal zR ]]
+-- vim.cmd([[ autocmd BufRead,BufEnter,InsertLeave,BufWinEnter * normal zR ]])
 EOF
 
 
