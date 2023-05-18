@@ -36,6 +36,8 @@ alias vim="nvim"
 alias ls="lsd"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias good_morning='~/.scripts/new_journal_entry.sh'
+alias reader='sioyek'
+alias debug='iex -S mix test $1 --timeout=99999999999'
 ##############################
 
 # use vim in terminal
@@ -57,7 +59,7 @@ bindkey -M vicmd 'y' vi-yank-clipboard
 # kep iex history in different session
 export ERL_AFLAGS="-kernel shell_history enabled"
 # compile new versions of erlang with docs
-export KERL_BUILD_DOCS="yes"
+export KERL_BUILD_DOCS=yes
 
 if (( ! ${fpath[(I)/usr/local/share/zsh/site-functions]} )); then
   FPATH=/usr/local/share/zsh/site-functions:$FPATH
@@ -102,3 +104,6 @@ if [ -f '/Users/thalesflores/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . 
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/thalesflores/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/thalesflores/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# 1Password completention
+eval "$(op completion zsh)"; compdef _op op
