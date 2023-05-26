@@ -6,6 +6,5 @@
   "solargraph.formatting": true,
   "solargraph.hover": true,
 
-  "eslint.autoFixOnSave": true,
-
+  "eslint.autoFixOnSave": true
 }
