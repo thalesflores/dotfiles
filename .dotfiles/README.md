@@ -10,12 +10,11 @@ First of all, let's clone this repo
 git clone --bare https://github.com/thalesflores/dotfiles.git $HOME/.dotfiles
 ```
 
-Then we need to setup a new alias to dotfiles(on `.zshrc` it will be already there, so you just to setup it in the current shell session).
+Then we need to setup a new alias to dotfiles(on `.zshrc` it will be already there, so you just need to setup it in the current shell session).
 
 ```sh
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 ```
-
 And lastly just run `dotfiles checkout` to set the files on your root
 
 NOTE: if you already have some of the files locally, you could run the following command to create a backup of it:
@@ -44,7 +43,7 @@ dotfiles config --local status.showUntrackedFiles no
 ### Running setup script
 
 The script `.config/setup.sh` is resposible to download all brew applications, setup `zsh` and it  plugins and theme.
-In addition, the script will install `vim-plug`, ASDF plugins and tools, and `elixir-ls` to be used on VIM
+In addition, the script will install vim, ASDF plugins and tools, and `elixir-ls` to be used on VIM
 
 To execute it, just run: 
 

@@ -8,7 +8,6 @@ install_homebrew() {
   printf "Homebrew instalation finished\n"
 }
 
-
 restore_brew() {
   # install things throug brew
   echo "Installing Brew bundle"
@@ -21,8 +20,9 @@ delete_current_files() {
   echo "Deleting current files"
   config=$HOME/.config
   files=("$config/nvim/init.vim"
+         "$config/nvim/init.lua"
          "$config/gitui/key_config.ron"
-         "$config/gh/hosts.yml" 
+         "$config/gh/hosts.yml"
          "$config/gh/config.yml"
          "$HOME/.zshrc"
          "$HOME/.tmux.conf"
@@ -121,15 +121,6 @@ install_zsh_tools() {
   printf "ZSH plugins installed\n"
 }
 
-install_vim_plug() {
-  printf "Installing the amazing Vim Plug\n"
-
-  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-
-  printf "Vim Plug was installed"
-}
-
 install_tmux_tpm() {
 
   echo "Installing Tmux package manager..."
@@ -148,8 +139,6 @@ install_powerlevel10k
 install_zsh_tools
 install_asdf_tools
 install_elixir_ls
-install_vim_plug
 install_tmux_tpm
-
 
 echo "Your mac is ready to be used, enjoy"
