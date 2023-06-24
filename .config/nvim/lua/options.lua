@@ -10,8 +10,8 @@ g.maplocalleader = " "
 -- color schema
 vim.cmd('colorscheme nord')
 
--- font
-opt.guifont = 'Fira Code:h18' -- set fira code |>
+-- font |>
+opt.guifont = 'JetBrains Mono'
 
 -- general
 opt.mouse   = 'a'

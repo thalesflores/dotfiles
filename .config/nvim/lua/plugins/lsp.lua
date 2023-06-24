@@ -19,7 +19,7 @@ end
 
 local ALE = { 'dense-analysis/ale', {} }
 local COC_ELIXIR = { 'amiralies/coc-elixir', build = 'yarn install && yarn prepack' }
-local COC = { 'neoclide/coc.nvim', brach = 'release' }
+local COC = { 'neoclide/coc.nvim', brach = 'release', build = 'yarn install --frozen-lockfile' }
 
 
 ALE.config = function()
