@@ -40,9 +40,10 @@ To make the `dotfiles` command more straightforward, you could run the following
 dotfiles config --local status.showUntrackedFiles no
 ```
 
+
 ### Running setup script
 
-The script `.config/setup.sh` is resposible to download all brew applications, setup `zsh` and it  plugins and theme.
+The script `.config/setup.sh` is responsible to download all brew applications, setup `zsh` and it  plugins and theme.
 In addition, the script will install vim, ASDF plugins and tools, and `elixir-ls` to be used on VIM
 
 To execute it, just run: 
@@ -53,9 +54,38 @@ bash ~/.config/setup.sh
 
 ### Update terminal profile
 
-This one is usefull if you want to keep the consistence between all your iTerms, to do this just go to `profiles -> Default -> Edit Profiles -> Other Actions -> Import JSON profiles` and there select `thales_profile.json`
+This one is useful if you want to keep the consistence between all your iTerms, to do this just go to `profiles -> Default -> Edit Profiles -> Other Actions -> Import JSON profiles` and there select `~/thalesflores_terminal.json`
 
 ### Install VIM and TMUX plugins
-As a last step, you need to enter in your vim and run `:PlugInstall` to install all plugins to be used by it
+As a last step, you need to enter in your vim and run `:Lazy` to see the extension installation status.
 
 To install `TMUX` ones, open a new session `tmux`, and just run `prefix + I`, where prefix is configured to be `ctrl + e`
+
+## Update dotfile configurations
+
+### Generate/Update Brewfile
+
+First we should install the bundle in the machine
+
+```sh
+brew tap Homebrew/bundle
+```
+
+Then, to generate/restore the Brewfile run
+
+```sh
+brew bundle dump
+```
+
+Once the Brewfile is generated, you could copy that to any machine and restore the same configurations
+running 
+
+```sh
+brew bundle
+```
+
+and in case of you want to add/remove one specific installation from your Brewfile, update the file with
+
+```sh
+vim ~/Brewfile
+```
