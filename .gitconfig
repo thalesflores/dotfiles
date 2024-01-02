@@ -10,7 +10,8 @@
 
 [alias]
   hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
-  force-push = commit --amend && git push -f
+  force-push = commit --amend --no-edit && git push -f
+  current-branch = rev-parse --abbrev-ref HEAD
 
 [core]
 	editor = nvim

@@ -1,11 +1,18 @@
--- highlight langs
+local opt = vim.opt -- global settings options
+
 -- Show function context when scrolling
 --  'nvim-treesitter/nvim-treesitter-context',
 
+-- highlight langs
 return {
   'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate',
   config = function()
+    -- enabling fold
+    opt.foldmethod = 'expr'
+    opt.foldexpr   = 'nvim_treesitter#foldexpr()'
+    opt.foldenable = false
+
     require('nvim-treesitter.configs').setup({
       -- A list of parser names, or "all"
       ensure_installed = { "elixir", "eex", "heex", "erlang", "lua", "javascript", "typescript", "vim", "ruby" },
@@ -22,6 +29,7 @@ return {
       },
 
       indent = { enable = true }
+
     })
   end
 }

@@ -1,6 +1,6 @@
 return {
   {
-    'shaunsingh/nord.nvim', lazy = false, priority = 1000 }, -- colorscheme
+  'shaunsingh/nord.nvim', lazy = false, priority = 1000 }, -- colorscheme
   'tpope/vim-surround',                                      -- surrounding
   'vim-scripts/tComment',                                    -- Add shortcuts for commenting block of codes.
   'jiangmiao/auto-pairs',                                    -- closing braces and brackets

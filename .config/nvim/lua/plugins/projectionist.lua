@@ -12,6 +12,7 @@ PROJECTIONIST.config = function()
     ['app/models/*.rb'] = { type = 'model' },
     ['app/controllers/*.rb'] = { type = 'controller' },
     ['app/views/*.rb'] = { type = 'view' },
+    ['spec/*_spec.rb'] = { type = 'test' },
   }
 
   g.projectionist_heuristics = heuristics

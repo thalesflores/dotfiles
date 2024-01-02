@@ -25,9 +25,6 @@ source "$ZSH/oh-my-zsh.sh"
 
 export EDITOR='nvim'
 
-# importing commands and alias that are used by leav
-[[ -f ~/.leav_bash_req ]] && source ~/.leav_bash_req
-
 ####### ALIAS #############
 
 alias mf="mix format"
@@ -87,6 +84,11 @@ function zsh_vi_init() {
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 }
 
+# temporary fix to make the zsh-highlighting work
+function zvm_after_init() {
+  autoload add-zle-hook-widget
+  add-zle-hook-widget zle-line-pre-redraw zvm_zle-line-pre-redraw
+}
 # this function overwrite the de default one, enabling to yank to clipboard when using zsh_vi_mode
 function zvm_vi_yank() {
 	zvm_yank
@@ -98,12 +100,6 @@ zvm_after_init_commands+=(zsh_vi_init)
 
 export PATH="/usr/local/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/thalesflores/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/thalesflores/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/thalesflores/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/thalesflores/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
 # 1Password completention
 eval "$(op completion zsh)"; compdef _op op

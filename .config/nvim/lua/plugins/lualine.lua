@@ -13,7 +13,7 @@ return {
         lualine_b = { 'branch' },
         lualine_c = { 'filename', 'diff', 'diagnostics' },
         lualine_x = { 'searchcount', 'filetype' },
-        lualine_y = { { '%p%%', icon = '並' } },
+        lualine_y = { { '%p%%', icon = '≡' } },
         lualine_z = { { '%l/%L', icon = '' }, { '%c', icon = '℅' } },
       }
     })
