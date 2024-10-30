@@ -16,15 +16,4 @@ local GLOW = {
   end
 }
 
--- Better markdown view in the editor
-local MARKVIEW = {
-  "OXY2DEV/markview.nvim",
-  lazy = false,
-  dependencies = {
-    "nvim-treesitter/nvim-treesitter",
-    "nvim-tree/nvim-web-devicons"
-  }
-}
-
-
-return { GLOW, MARKDOWN_PREVIEW, MARKVIEW }
+return { GLOW, MARKDOWN_PREVIEW }

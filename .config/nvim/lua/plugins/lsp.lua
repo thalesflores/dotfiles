@@ -19,13 +19,15 @@ end
 
 local ALE = { 'dense-analysis/ale', {} }
 local COC_ELIXIR = { 'amiralies/coc-elixir', build = 'yarn install && yarn prepack' }
-local COC = { 'neoclide/coc.nvim', branch = 'master', build = 'npm ci' }
+local COC = { 'neoclide/coc.nvim', brach = 'master', build = 'npm ci' }
 
 ALE.config = function()
   g.ale_fixers = { elixir = { 'mix_format' }, ruby = { 'rubocop' } }
   g.ale_linters = { elixir = { 'elixir-ls' }, ruby = { 'rubocop' }, javascript = { 'eslint' } }
 
   g.ale_fix_on_save = 1
+  g.ale_ruby_rubocop_auto_correct_all = 1
+
   --using credo elixir
   g.ale_elixir_credo_strict = 1
 end
@@ -52,20 +54,20 @@ COC.config = function()
 
   nnoremap('<leader>rn', '<Plug>(coc-rename)', { silent = true })
   nnoremap('<leader>k', '<CMD>lua _G.show_docs()<CR>', { silent = true })
-  nnoremap('<space>d', '<CMD><c-u>CocList diagnostics<cr>', { silent = true })
+  nnoremap('<leader>d', '<CMD><C-u>CocList diagnostics<cr>', { silent = true })
 
-  nnoremap('<leader>co', '<CMD><c-u>CocList outline<CR>', { silent = true, desc = 'Show all funcs' })
-  nnoremap('<leader>cd', '<CMD><c-u>CocDiagnostics<CR>', { silent = true, desc = 'Show file problems' })
+  nnoremap('<leader>co', '<CMD><C-u>CocList outline<CR>', { silent = true, desc = 'Show all funcs' })
+  nnoremap('<leader>cd', '<CMD><C-u>CocDiagnostics<CR>', { silent = true, desc = 'Show file problems' })
 
   --Remap <C-f> and <C-b> for scroll float windows/popups.
 
   local float_opts = { silent = true, nowait = true, expr = true }
-  nnoremap("<C-f>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', float_opts)
-  nnoremap("<C-b>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', float_opts)
-  inoremap("<C-f>", 'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(1)<cr>" : "<Right>"', float_opts)
-  inoremap("<C-b>", 'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(0)<cr>" : "<Left>"', float_opts)
-  vnoremap("<C-f>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', float_opts)
-  vnoremap("<C-b>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', float_opts)
+  nnoremap("<C-d>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', float_opts)
+  nnoremap("<C-u>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', float_opts)
+  inoremap("<C-d>", 'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(1)<cr>" : "<Right>"', float_opts)
+  inoremap("<C-d>", 'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(0)<cr>" : "<Left>"', float_opts)
+  vnoremap("<C-u>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', float_opts)
+  vnoremap("<C-d>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', float_opts)
 end
 
 return { ALE, COC, COC_ELIXIR }

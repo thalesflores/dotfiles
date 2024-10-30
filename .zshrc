@@ -101,5 +101,8 @@ zvm_after_init_commands+=(zsh_vi_init)
 export PATH="/usr/local/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
+# import scripts
+export PATH="~/.config/kindcompletion:$PATH"
+
 # 1Password completention
 eval "$(op completion zsh)"; compdef _op op

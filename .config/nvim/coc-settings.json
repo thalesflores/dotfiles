@@ -38,5 +38,6 @@
       "args": ["server", "-m", "stream"],
       "filetypes": ["typescript", "typescriptreact", "graphql", "javascript"]
     }
-  }
+  },
+  "typescript.implementationsCodeLens.enabled": true
 }

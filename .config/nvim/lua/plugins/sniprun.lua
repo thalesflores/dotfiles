@@ -1,10 +1,11 @@
 -- run code snippets
 return {
   'michaelb/sniprun',
-  build = 'bash ./install.sh',
+  build = 'sh install.sh',
   config = function()
     require 'sniprun'.setup({
-      display = { "Classic" }
+      display = { "Terminal" }
     })
   end
 }
+
