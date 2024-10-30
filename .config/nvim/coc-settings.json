@@ -1,10 +1,42 @@
 {
   "elixir.pathToElixirLS": "~/.elixir-ls/release/language_server.sh",
-
   "solargraph.diagnostics": true,
   "solargraph.autoformat": true,
   "solargraph.formatting": true,
   "solargraph.hover": true,
+  "eslint.autoFixOnSave": true,
+  "diagnostic.messageTarget": "echo",
 
-  "eslint.autoFixOnSave": true
+  "languageserver": {
+    "ruby-lsp": {
+      "command": "ruby-lsp",
+      "initializationOptions": {
+        "experimentalFeaturesEnabled": false,
+        "enabledFeatures": [
+          "codeActions",
+          "completion",
+          "completionResolve",
+          "diagnostics",
+          "definition",
+          "documentHighlights",
+          "documentLink",
+          "documentSymbols",
+          "foldingRanges",
+          "formatting",
+          "hover",
+          "inlayHint",
+          "onTypeFormatting",
+          "selectionRanges",
+          "semanticHighlighting"
+        ],
+        "formatter": "auto"
+      },
+      "filetypes": ["ruby"]
+    },
+    "graphql": {
+      "command": "graphql-lsp",
+      "args": ["server", "-m", "stream"],
+      "filetypes": ["typescript", "typescriptreact", "graphql", "javascript"]
+    }
+  }
 }

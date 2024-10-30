@@ -19,11 +19,10 @@ end
 
 local ALE = { 'dense-analysis/ale', {} }
 local COC_ELIXIR = { 'amiralies/coc-elixir', build = 'yarn install && yarn prepack' }
-local COC = { 'neoclide/coc.nvim', brach = 'release', build = 'yarn install --frozen-lockfile' }
-
+local COC = { 'neoclide/coc.nvim', branch = 'master', build = 'npm ci' }
 
 ALE.config = function()
-  g.ale_fixers = { elixir = { 'mix_format' } }
+  g.ale_fixers = { elixir = { 'mix_format' }, ruby = { 'rubocop' } }
   g.ale_linters = { elixir = { 'elixir-ls' }, ruby = { 'rubocop' }, javascript = { 'eslint' } }
 
   g.ale_fix_on_save = 1
@@ -39,7 +38,13 @@ COC.config = function()
   -- Add `:Format` command to format current buffer
   vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
 
-  inoremap('<C-space>', "coc#refresh()", { desc = "Autocomplete using COC with ctrl+space", silent = true, expr = true, })
+  -- vim.cmd [[
+  -- inoremap <silent><expr> <C-space> coc#refresh()
+  -- ]]
+  
+  inoremap("<C-a>", "coc#refresh()", {silent = true, expr = true})
+  
+
   nnoremap('gd', '<Plug>(coc-definition)', { silent = true })
   nnoremap('gt', '<Plug>(coc-type-definition)', { silent = true })
   nnoremap('gi', '<Plug>(coc-implementation)', { silent = true })
@@ -47,10 +52,10 @@ COC.config = function()
 
   nnoremap('<leader>rn', '<Plug>(coc-rename)', { silent = true })
   nnoremap('<leader>k', '<CMD>lua _G.show_docs()<CR>', { silent = true })
-  nnoremap('<space>d', '<CMD><C-u>CocList diagnostics<cr>', { silent = true })
+  nnoremap('<space>d', '<CMD><c-u>CocList diagnostics<cr>', { silent = true })
 
-  nnoremap('<leader>co  ', '<CMD><C-u>CocList outline<CR>', { silent = true, desc = 'Show all funcs' })
-  nnoremap('<leader>cd', '<CMD><C-u>CocDiagnostics<CR>', { silent = true, desc = 'Show file problems' })
+  nnoremap('<leader>co', '<CMD><c-u>CocList outline<CR>', { silent = true, desc = 'Show all funcs' })
+  nnoremap('<leader>cd', '<CMD><c-u>CocDiagnostics<CR>', { silent = true, desc = 'Show file problems' })
 
   --Remap <C-f> and <C-b> for scroll float windows/popups.
 

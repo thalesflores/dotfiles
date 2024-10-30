@@ -1,6 +1,6 @@
 return {
   {
-  'shaunsingh/nord.nvim', lazy = false, priority = 1000 }, -- colorscheme
+    'shaunsingh/nord.nvim', lazy = false, priority = 1000 }, -- colorscheme
   'tpope/vim-surround',                                      -- surrounding
   'vim-scripts/tComment',                                    -- Add shortcuts for commenting block of codes.
   'jiangmiao/auto-pairs',                                    -- closing braces and brackets
@@ -10,11 +10,12 @@ return {
   'eugen0329/vim-esearch',                                   -- search
   'benmills/vimux',                                          -- Creates or run commands from VIM on existing TMUX panes.
   'christoomey/vim-tmux-navigator',                          -- tmux integration
-  'tpope/vim-endwise',                                       -- auto add end in functions
+  'RRethy/nvim-treesitter-endwise',                          -- auto add end in functions
   'mhinz/vim-startify',                                      -- fancy initial screen to vim
   'tpope/vim-eunuch',                                        -- Easialy rename files using :Rename filename newfilename
-  { 'fatih/vim-go', build = ':GoUpdateBinaries' },           -- Golang helpers
+  { 'fatih/vim-go',       build = ':GoUpdateBinaries' },     -- Golang helpers
 
+  -- 'tpope/vim-endwise',                                       -- auto add end in functions
   -- Todo highligth and list
   {
     'folke/todo-comments.nvim',
@@ -29,5 +30,17 @@ return {
     config = function()
       require('mini.cursorword').setup({ delay = 300 })
     end
-  }
+  },
+
+  -- see yanked values in telescope
+  {
+    "AckslD/nvim-neoclip.lua",
+    dependencies = { 'nvim-telescope/telescope.nvim' },
+    config = function()
+      require('neoclip').setup()
+    end,
+  },
+
+  -- http request directly on vim
+  { "rest-nvim/rest.nvim" },
 }

@@ -21,8 +21,15 @@ TELESCOPE.config = function()
   require('telescope').setup({
     defaults = {
       file_ignore_patterns = { "node_modules", "_build", "deps", '.elixir_ls' }
+    },
+    extensions = {
+        quicknote = {
+            defaultScope = "CurrentBuffer",
+        }
     }
   })
+
+  require("telescope").load_extension("quicknote")
 end
 
 return TELESCOPE
