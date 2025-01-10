@@ -18,6 +18,12 @@ TELESCOPE.config = function()
   nnoremap('<leader>bb', builtin.buffers, { desc = 'Lists buffers' })
   nnoremap('<leader>fh', builtin.help_tags, { desc = 'Lists all help tags `:...`' })
 
+  -- LSP commands
+  nnoremap('gd', builtin.lsp_definitions, { desc = 'Go to definition' })
+  nnoremap('<leader>ds', builtin.lsp_document_symbols, { desc = 'Show all symbols in the current file' })
+  nnoremap('<leader>rr', builtin.lsp_references, { desc = '' })
+
+
   require('telescope').setup({
     defaults = {
       file_ignore_patterns = { "node_modules", "_build", "deps", '.elixir_ls' }

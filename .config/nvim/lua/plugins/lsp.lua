@@ -1,73 +1,118 @@
-local u = require 'utils'
+local LSP_CONFIG = { 'neovim/nvim-lspconfig' }
+local MASON = { 'williamboman/mason.nvim' }
+local MASON_LSP_CONFIG = { 'williamboman/mason-lspconfig.nvim' }
 
-local g = vim.g
-
-local nnoremap = u.nnoremap
-local inoremap = u.inoremap
-local vnoremap = u.vnoremap
-
-function _G.show_docs()
-  local cw = vim.fn.expand('<cword>')
-  if vim.fn.index({ 'vim', 'help' }, vim.bo.filetype) >= 0 then
-    vim.api.nvim_command('h ' .. cw)
-  elseif vim.api.nvim_eval('coc#rpc#ready()') then
-    vim.fn.CocActionAsync('doHover')
-  else
-    vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
-  end
+MASON.config = function()
+  require("mason").setup()
 end
 
-local ALE = { 'dense-analysis/ale', {} }
-local COC_ELIXIR = { 'amiralies/coc-elixir', build = 'yarn install && yarn prepack' }
-local COC = { 'neoclide/coc.nvim', brach = 'master', build = 'npm ci' }
+local lua_ls = function()
+        local lspconfig = require("lspconfig")
+        lspconfig.lua_ls.setup {
+          on_init = function(client)
+            if client.workspace_folders then
+              local path = client.workspace_folders[1].name
+              if vim.uv.fs_stat(path..'/.luarc.json') or vim.uv.fs_stat(path..'/.luarc.jsonc') then
+                return
+              end
+            end
 
-ALE.config = function()
-  g.ale_fixers = { elixir = { 'mix_format' }, ruby = { 'rubocop' } }
-  g.ale_linters = { elixir = { 'elixir-ls' }, ruby = { 'rubocop' }, javascript = { 'eslint' } }
+            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+              runtime = {
+                -- Tell the language server which version of Lua you're using
+                version = 'LuaJIT'
+              },
+              -- Make the server aware of Neovim runtime files
+              workspace = {
+                checkThirdParty = false,
+                library = {
+                  vim.env.VIMRUNTIME,
+                  "${3rd}/luv/library"
 
-  g.ale_fix_on_save = 1
-  g.ale_ruby_rubocop_auto_correct_all = 1
+                }
+              }
+            })
+          end,
+          settings = {
+            Lua = {}
+          }
+        }
+      end
 
-  --using credo elixir
-  g.ale_elixir_credo_strict = 1
+local docker_compose_language_service = function()
+  require'lspconfig'.docker_compose_language_service.setup{}
 end
 
-COC.config = function()
-  g.coc_global_extensions = { 'coc-elixir', 'coc-diagnostic' }
-  -- format on save elixir projects
-  g.mix_format_on_save = 1
-
-  -- Add `:Format` command to format current buffer
-  vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
-
-  -- vim.cmd [[
-  -- inoremap <silent><expr> <C-space> coc#refresh()
-  -- ]]
-  
-  inoremap("<C-a>", "coc#refresh()", {silent = true, expr = true})
-  
-
-  nnoremap('gd', '<Plug>(coc-definition)', { silent = true })
-  nnoremap('gt', '<Plug>(coc-type-definition)', { silent = true })
-  nnoremap('gi', '<Plug>(coc-implementation)', { silent = true })
-  nnoremap('gr', '<Plug>(coc-references)', { silent = true })
-
-  nnoremap('<leader>rn', '<Plug>(coc-rename)', { silent = true })
-  nnoremap('<leader>k', '<CMD>lua _G.show_docs()<CR>', { silent = true })
-  nnoremap('<leader>d', '<CMD><C-u>CocList diagnostics<cr>', { silent = true })
-
-  nnoremap('<leader>co', '<CMD><C-u>CocList outline<CR>', { silent = true, desc = 'Show all funcs' })
-  nnoremap('<leader>cd', '<CMD><C-u>CocDiagnostics<CR>', { silent = true, desc = 'Show file problems' })
-
-  --Remap <C-f> and <C-b> for scroll float windows/popups.
-
-  local float_opts = { silent = true, nowait = true, expr = true }
-  nnoremap("<C-d>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', float_opts)
-  nnoremap("<C-u>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', float_opts)
-  inoremap("<C-d>", 'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(1)<cr>" : "<Right>"', float_opts)
-  inoremap("<C-d>", 'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(0)<cr>" : "<Left>"', float_opts)
-  vnoremap("<C-u>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', float_opts)
-  vnoremap("<C-d>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', float_opts)
+local dockerls = function()
+  require'lspconfig'.dockerls.setup{}
 end
 
-return { ALE, COC, COC_ELIXIR }
+local elixirls = function()
+  require'lspconfig'.elixirls.setup{
+      cmd = { "~/.elixir-ls/release/language_server.sh" };
+  }
+end
+
+local eslint = function()
+  require'lspconfig'.eslint.setup({
+    on_attach = function(client, bufnr)
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        buffer = bufnr,
+        command = "EslintFixAll",
+      })
+    end,
+  })
+end
+
+local rubocop = function()
+  require'lspconfig'.rubocop.setup{}
+end
+
+local ruby_lsp = function()
+  require'lspconfig'.ruby_lsp.setup{}
+end
+
+local solargraph = function()
+  require'lspconfig'.solargraph.setup{}
+end
+
+local sqlls = function()
+  require'lspconfig'.sqlls.setup{}
+end
+
+local ts_ls = function()
+  require'lspconfig'.ts_ls.setup{}
+end
+
+
+
+MASON_LSP_CONFIG.config = function()
+  require("mason-lspconfig").setup({
+    ensure_installed = {
+      "lua_ls",
+      "docker_compose_language_service",
+      "dockerls",
+      "elixirls",
+      "eslint",
+      "rubocop",
+      "ruby_lsp",
+      "solargraph",
+      "sqlls",
+      "ts_ls",
+    },
+    handlers = {
+      ["lua_ls"] = lua_ls,
+      ["docker_compose_language_service"] = docker_compose_language_service,
+      ["dockerls"] = dockerls,
+      ["elixirls"] = elixirls,
+      ["eslint"] = eslint,
+      ["rubocop"] = rubocop,
+      ["ruby_lsp"] = ruby_lsp,
+      ["solargraph"] = solargraph,
+      ["sqlls"] = sqlls,
+      ["ts_ls"] = ts_ls,
+    },
+})
+end
+
+return {MASON, MASON_LSP_CONFIG, LSP_CONFIG}
