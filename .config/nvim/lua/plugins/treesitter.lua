@@ -9,9 +9,17 @@ return {
   build = ':TSUpdate',
   config = function()
     -- enabling fold
-    opt.foldmethod = 'expr'
-    opt.foldexpr   = 'nvim_treesitter#foldexpr()'
-    opt.foldenable = false
+    opt.foldenable    = false
+    vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr   = 'v:lua.vim.treesitter.foldexpr()'
+
+    -- load jbuilder files as ruby
+    vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+      pattern = "*.json.jbuilder",
+      callback = function()
+        vim.bo.filetype = "ruby"
+      end
+    })
 
     require('nvim-treesitter.configs').setup({
       -- A list of parser names, or "all"
