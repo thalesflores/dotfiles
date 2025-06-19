@@ -10,12 +10,14 @@
 
 [alias]
   hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
-  force-push = commit --amend --no-edit && git push -f
+  force-push = commit --amend --no-edit && git push --force
   current-branch = rev-parse --abbrev-ref HEAD
+  prune-gone = "!git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -dD"
+	l = "log --pretty=format:'%C(#cccc00)%h %Cred%ad %Creset%<(60,trunc)%s%C(auto)%d %C(magenta)%<(15,trunc)%an' --date=format:'%y%m%d'"
 
 [core]
 	editor = nvim
-	excludesfile = /Users/thalesflores/.gitignore_global
+	excludesFile = .pryrc
 	eol = lf
 	autocrlf = false
 
@@ -53,6 +55,24 @@
 
 [commit]
   gpgsign = true
+	verbose = true
 
 [url "ssh://git@github.com/"]
-  insteadOf = https://github.com/
+ insteadOf = https://github.com/
+[maintenance]
+	repo = /Users/thalesflores/Desktop/projects/admin
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[help]
+	autocorrect = prompt
