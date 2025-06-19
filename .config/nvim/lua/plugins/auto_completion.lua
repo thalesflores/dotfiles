@@ -1,5 +1,3 @@
-local u = require 'utils'
-
 local LUA_SNIP = { "L3MON4D3/LuaSnip", version = "v2.3", dependencies = { "saadparwaiz1/cmp_luasnip" } }
 local NVIM_CMP = { 'hrsh7th/nvim-cmp', dependencies = {
   'neovim/nvim-lspconfig',
@@ -31,7 +29,7 @@ NVIM_CMP.config = function()
       }),
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-        { name = 'luasnip' }, -- For luasnip users.
+        { name = 'luasnip' },
       }, {
         { name = 'buffer' },
       })
@@ -62,10 +60,6 @@ NVIM_CMP.config = function()
   }
 
   require('lspconfig')['ruby_lsp'].setup {
-    capabilities = capabilities
-  }
-
-  require('lspconfig')['solargraph'].setup {
     capabilities = capabilities
   }
 
