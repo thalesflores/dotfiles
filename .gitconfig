@@ -59,8 +59,7 @@
 
 [url "ssh://git@github.com/"]
  insteadOf = https://github.com/
-[maintenance]
-	repo = /Users/thalesflores/Desktop/projects/admin
+
 [column]
 	ui = auto
 [branch]
