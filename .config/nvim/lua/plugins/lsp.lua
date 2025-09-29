@@ -1,118 +1,134 @@
-local LSP_CONFIG = { 'neovim/nvim-lspconfig' }
-local MASON = { 'williamboman/mason.nvim' }
-local MASON_LSP_CONFIG = { 'williamboman/mason-lspconfig.nvim' }
+local u = require("utils")
+local nnoremap = u.nnoremap
+
+local LSP_CONFIG = { "neovim/nvim-lspconfig" }
+local MASON = { "williamboman/mason.nvim" }
+local MASON_LSP_CONFIG = { "williamboman/mason-lspconfig.nvim" }
+local HELM_LS = {
+    "qvalentin/helm-ls.nvim",
+    ft = "helm",
+    config = {
+        conceal_templates = {
+            -- enable the replacement of templates with virtual text of their current values
+            enabled = false,
+        },
+        indent_hints = {
+            -- enable hints for indent and nindent functions
+            enabled = true,
+            -- show the hints only for the line the cursor is on
+            only_for_current_line = true,
+        },
+    },
+}
 
 MASON.config = function()
-  require("mason").setup()
+    require("mason").setup()
 end
 
-local lua_ls = function()
-        local lspconfig = require("lspconfig")
-        lspconfig.lua_ls.setup {
-          on_init = function(client)
-            if client.workspace_folders then
-              local path = client.workspace_folders[1].name
-              if vim.uv.fs_stat(path..'/.luarc.json') or vim.uv.fs_stat(path..'/.luarc.jsonc') then
-                return
-              end
-            end
+-- show float with error
+nnoremap("Z", vim.diagnostic.open_float, { desc = "Show the diagnostic in a float" })
+nnoremap("S", function()
+    local new_config = not vim.diagnostic.config().virtual_lines
+    vim.diagnostic.config({ virtual_lines = new_config })
+end, { desc = "Toggle diagnostic virtual_lines" })
 
-            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-              runtime = {
-                -- Tell the language server which version of Lua you're using
-                version = 'LuaJIT'
-              },
-              -- Make the server aware of Neovim runtime files
-              workspace = {
+-------------------------
+-- LS personal configs --
+-------------------------
+
+vim.lsp.config("lua_ls", {
+    settings = {
+        Lua = {
+            runtime = { version = "LuaJIT" },
+            diagnostics = { globals = { "vim" } },
+            workspace = {
                 checkThirdParty = false,
                 library = {
-                  vim.env.VIMRUNTIME,
-                  "${3rd}/luv/library"
-
-                }
-              }
-            })
-          end,
-          settings = {
-            Lua = {}
-          }
-        }
-      end
-
-local docker_compose_language_service = function()
-  require'lspconfig'.docker_compose_language_service.setup{}
-end
-
-local dockerls = function()
-  require'lspconfig'.dockerls.setup{}
-end
-
-local elixirls = function()
-  require'lspconfig'.elixirls.setup{
-      cmd = { "~/.elixir-ls/release/language_server.sh" };
-  }
-end
-
-local eslint = function()
-  require'lspconfig'.eslint.setup({
-    on_attach = function(client, bufnr)
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = bufnr,
-        command = "EslintFixAll",
-      })
-    end,
-  })
-end
-
-local rubocop = function()
-  require'lspconfig'.rubocop.setup{}
-end
-
-local ruby_lsp = function()
-  require'lspconfig'.ruby_lsp.setup{}
-end
-
-local solargraph = function()
-  require'lspconfig'.solargraph.setup{}
-end
-
-local sqlls = function()
-  require'lspconfig'.sqlls.setup{}
-end
-
-local ts_ls = function()
-  require'lspconfig'.ts_ls.setup{}
-end
-
-
-
-MASON_LSP_CONFIG.config = function()
-  require("mason-lspconfig").setup({
-    ensure_installed = {
-      "lua_ls",
-      "docker_compose_language_service",
-      "dockerls",
-      "elixirls",
-      "eslint",
-      "rubocop",
-      "ruby_lsp",
-      "solargraph",
-      "sqlls",
-      "ts_ls",
-    },
-    handlers = {
-      ["lua_ls"] = lua_ls,
-      ["docker_compose_language_service"] = docker_compose_language_service,
-      ["dockerls"] = dockerls,
-      ["elixirls"] = elixirls,
-      ["eslint"] = eslint,
-      ["rubocop"] = rubocop,
-      ["ruby_lsp"] = ruby_lsp,
-      ["solargraph"] = solargraph,
-      ["sqlls"] = sqlls,
-      ["ts_ls"] = ts_ls,
+                    vim.api.nvim_get_runtime_file("", true),
+                },
+            },
+            telemetry = { enable = false },
+        },
     },
 })
+
+vim.lsp.config("eslint", {
+    on_attach = function(client, bufnr)
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+        })
+    end,
+})
+
+vim.lsp.config("helm_ls", {
+    settings = {
+        ["helm-ls"] = {
+            yamlls = {
+                path = "yaml-language-server",
+            },
+        },
+    },
+})
+
+----------------------
+----------------------
+----------------------
+
+MASON_LSP_CONFIG.config = function()
+    require("mason-lspconfig").setup({
+        ensure_installed = {
+            "lua_ls",
+            "docker_compose_language_service",
+            "dockerls",
+            "eslint",
+            "rubocop",
+            "ruby_lsp",
+            "sqlls",
+            "ts_ls",
+            "yamlls",
+        },
+    })
 end
 
-return {MASON, MASON_LSP_CONFIG, LSP_CONFIG}
+local ELIXIR_TOOLS = {
+    "elixir-tools/elixir-tools.nvim",
+    version = "*",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+        local elixir = require("elixir")
+        local elixirls = require("elixir.elixirls")
+
+        elixir.setup({
+            nextls = { enable = true },
+            elixirls = {
+                enable = true,
+                settings = elixirls.settings({
+                    dialyzerEnabled = false,
+                    enableTestLenses = false,
+                }),
+                on_attach = function(client, bufnr)
+                    vim.keymap.set("n", "<space>fp", ":ElixirFromPipe<cr>", { buffer = true, noremap = true })
+                    vim.keymap.set("n", "<space>tp", ":ElixirToPipe<cr>", { buffer = true, noremap = true })
+                    vim.keymap.set("v", "<space>em", ":ElixirExpandMacro<cr>", { buffer = true, noremap = true })
+                end,
+            },
+            projectionist = {
+                enable = true,
+            },
+        })
+    end,
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+    },
+}
+
+vim.lsp.enable("postgres_lsp")
+
+return {
+    LSP_CONFIG,
+    MASON,
+    MASON_LSP_CONFIG,
+    ELIXIR_TOOLS,
+    HELM_LS,
+}
