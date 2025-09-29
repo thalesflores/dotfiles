@@ -13,9 +13,29 @@ return {
     opt.foldexpr   = 'nvim_treesitter#foldexpr()'
     opt.foldenable = false
 
+    -- load jbuilder files as ruby
+    vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+      pattern = "*.json.jbuilder",
+      callback = function()
+        vim.bo.filetype = "ruby"
+      end
+    })
+
     require('nvim-treesitter.configs').setup({
       -- A list of parser names, or "all"
-      ensure_installed = { "elixir", "eex", "heex", "erlang", "lua", "javascript", "typescript", "vim", "ruby" },
+      ensure_installed = { 
+        "elixir",
+        "eex",
+        "heex",
+        "erlang",
+        "lua",
+        "javascript",
+        "typescript",
+        "vim",
+        "ruby",
+        "markdown",
+        "markdown_inline"
+      },
 
       highlight = {
         enable = true,
