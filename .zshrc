@@ -8,14 +8,15 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # PLUGINS 
 plugins=(
-  zsh-vi-mode
-  zsh-autosuggestions
-  zsh-completions
-  git
-  asdf
   docker
   fzf
+  git
+  kubectl
+  zsh-autosuggestions
+  zsh-completions
   zsh-syntax-highlighting
+  zsh-vi-mode
+  mise
 )
 
 # config autosuggestions color
@@ -39,9 +40,6 @@ alias debug='iex -S mix test $1 --timeout=99999999999'
 
 # use vim in terminal
 set -o vi
-
-# asdf
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 # Yank to the system clipboard without using zsh-vi-mode
 function vi-yank-clipboard {
@@ -101,8 +99,11 @@ zvm_after_init_commands+=(zsh_vi_init)
 export PATH="/usr/local/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
+
 # import scripts
 export PATH="~/.config/kindcompletion:$PATH"
 
 # 1Password completention
 eval "$(op completion zsh)"; compdef _op op
+
+eval "$(~/.local/bin/mise activate zsh)"

@@ -16,6 +16,20 @@ restore_brew() {
   brew bundle
 }
 
+install_mise() {
+  echo "Installing mise"
+
+  /bin/bash -c "$(curl https://mise.run | sh)"
+
+  echo "Mise instalation has finished"
+
+  echo "Now, let's install the tools"
+
+  mise install
+
+  echo "Tools were installed successfully using mise"
+}
+
 delete_current_files() {
   echo "Deleting current files"
   config=$HOME/.config
@@ -46,36 +60,6 @@ restore_dotfiles() {
   dotfiles checkout
 
   echo "Dotfiles restored"
-}
-
-install_asdf_tools() {
-  echo "Installing ASDF plugins"
-
- for plugin in $(cut -d' ' -f1 "$HOME/.tool-versions"); do
-   echo "Installing plugin to $plugin"
-
-   asdf plugin add "$plugin"
- done
-
-  echo "Installing tools via ASDF"
-
-  asdf install
-
-  echo "Tools installed"
-}
-
-install_elixir_ls() {
-  echo "Cloning and installing elixirLS"
-  elixirls="$HOME/.elixir-ls"
-
-  if [[ -d "$elixirls" ]]; then rm -rf "$elixirls"; fi 
-
-  git clone https://github.com/elixir-lsp/elixir-ls.git "$elixirls"
-  cd "$elixirls" || return
-  mix deps.get && mix compile && mix elixir_ls.release -o release
-  cd "$HOME" || return
-
-  echo "elixirLS was installed"
 }
 
 install_oh_my_zsh() {
@@ -136,9 +120,8 @@ install_homebrew
 restore_brew
 install_oh_my_zsh
 install_powerlevel10k
+install_mise
 install_zsh_tools
-install_asdf_tools
-install_elixir_ls
 install_tmux_tpm
 
 echo "Your mac is ready to be used, enjoy"
