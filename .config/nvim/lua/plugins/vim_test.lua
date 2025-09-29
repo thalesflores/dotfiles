@@ -11,7 +11,7 @@ VIM_TEST.config = function()
   g['test#preserve_screen'] = 1
   g['test#filename_modifier'] = ":."
   -- If we want to run tests different based on the path
-  -- if string.match(vim.fn.expand('%:p'), "app.potloc.com/") then
+  -- if string.match(vim.fn.expand('%:p'), "app_path/") then
   --   g["test#ruby#rspec#executable"] = 'bin/docker/rspec'
   -- end
 

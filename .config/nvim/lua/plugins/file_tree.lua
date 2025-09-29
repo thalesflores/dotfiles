@@ -15,6 +15,7 @@ NVIM_TREE.config = function()
   require('nvim-tree').setup({
     filters = {
       dotfiles = true,
+      custom = { "_build", "deps" }
     }
   })
 end
