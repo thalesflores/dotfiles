@@ -24,7 +24,8 @@ end
 MASON_NULL_LS.config = function()
   require("mason-null-ls").setup({
     automatic_installation = true,
-    ensure_installed = { "stylua", "jq", "rubocop", "prettier", "sqlformat", "yamlfmt", "credo" },
+    -- credo (mix dep) and sqlformat (pip) aren't Mason packages — install them separately
+    ensure_installed = { "stylua", "jq", "rubocop", "prettier", "yamlfmt" },
     handlers = {},
   })
 end
