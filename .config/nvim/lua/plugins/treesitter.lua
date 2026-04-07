@@ -1,17 +1,42 @@
-local opt = vim.opt -- global settings options
-
--- Show function context when scrolling
---  'nvim-treesitter/nvim-treesitter-context',
-
 -- highlight langs
 return {
   'nvim-treesitter/nvim-treesitter',
+  branch = 'main',
+  lazy = false,
   build = ':TSUpdate',
   config = function()
-    -- enabling fold
-    opt.foldmethod = 'expr'
-    opt.foldexpr   = 'nvim_treesitter#foldexpr()'
-    opt.foldenable = false
+    -- install parsers
+    require('nvim-treesitter').install {
+      "elixir",
+      "eex",
+      "heex",
+      "erlang",
+      "lua",
+      "javascript",
+      "typescript",
+      "vim",
+      "ruby",
+      "markdown",
+      "markdown_inline"
+    }
+
+    -- enable treesitter highlighting for all installed parsers
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = {
+        'elixir', 'eex', 'heex', 'erlang', 'lua',
+        'javascript', 'typescript', 'vim', 'ruby',
+        'markdown', 'markdown_inline',
+      },
+      callback = function()
+        vim.treesitter.start()
+        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end,
+    })
+
+    -- folding via treesitter (disabled by default)
+    vim.opt.foldmethod = 'expr'
+    vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.opt.foldenable = false
 
     -- load jbuilder files as ruby
     vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
@@ -19,38 +44,6 @@ return {
       callback = function()
         vim.bo.filetype = "ruby"
       end
-    })
-
-    require('nvim-treesitter.configs').setup({
-      -- A list of parser names, or "all"
-      ensure_installed = { 
-        "elixir",
-        "eex",
-        "heex",
-        "erlang",
-        "lua",
-        "javascript",
-        "typescript",
-        "vim",
-        "ruby",
-        "markdown",
-        "markdown_inline"
-      },
-
-      highlight = {
-        enable = true,
-        use_languagetree = true,
-
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
-      },
-
-      indent = { enable = true },
-      endwise = { enable = true }
-
     })
   end
 }
