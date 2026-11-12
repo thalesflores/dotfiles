@@ -114,6 +114,17 @@ install_tmux_tpm() {
   echo "... Tmux package manager was installed"
 }
 
+link_claude() {
+  echo "Linking Claude Code config from ~/.config/claude-personal"
+  mkdir -p "$HOME/.claude"
+  for src in "$HOME/.config/claude-personal"/*; do
+    dst="$HOME/.claude/$(basename "$src")"
+    [ -e "$dst" ] && [ ! -L "$dst" ] && mv "$dst" "$dst.bak"
+    ln -sfn "$src" "$dst"
+  done
+  echo "Claude Code config linked"
+}
+
 echo "Hello, we will start to setup your new mac :)"
 
 install_homebrew
@@ -123,5 +134,6 @@ install_powerlevel10k
 install_mise
 install_zsh_tools
 install_tmux_tpm
+link_claude
 
 echo "Your mac is ready to be used, enjoy"
