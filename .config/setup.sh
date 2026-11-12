@@ -1,6 +1,7 @@
 #!/bin/bash
 # Sets up a new Mac from the dotfiles: Homebrew + Brewfile apps, Oh My Zsh with
-# its theme and plugins, mise tools, tmux plugin manager and the Claude Code config.
+# its theme and plugins, mise tools, tmux plugin manager, the Claude Code config and
+# the macOS settings from ~/.config/macos.sh.
 # Run it after `dotfiles checkout`. Safe to re-run: every step skips what is already there.
 set -euo pipefail
 
@@ -70,5 +71,6 @@ install_oh_my_zsh
 install_mise_tools
 install_tmux_tpm
 link_claude
+bash "$HOME/.config/macos.sh"
 
 echo "Your mac is ready to be used, enjoy"
