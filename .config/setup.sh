@@ -1,117 +1,54 @@
 #!/bin/bash
+# Sets up a new Mac from the dotfiles: Homebrew + Brewfile apps, Oh My Zsh with
+# its theme and plugins, mise tools, tmux plugin manager and the Claude Code config.
+# Run it after `dotfiles checkout`. Safe to re-run: every step skips what is already there.
+set -euo pipefail
+
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# clone <repo> <dir>, skipping when the dir already exists
+clone() {
+  [ -d "$2" ] || git clone --depth=1 "$1" "$2"
+}
 
 install_homebrew() {
-  printf "installing Homebrew\n"
-
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-  printf "Homebrew instalation finished\n"
+  if ! command -v brew >/dev/null && [ ! -x /opt/homebrew/bin/brew ]; then
+    echo "Installing Homebrew"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+  # puts brew on PATH for the rest of this script (Apple Silicon or Intel)
+  eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"
 }
 
 restore_brew() {
-  # install things throug brew
-  echo "Installing Brew bundle"
-  brew tap Homebrew/bundle
-  echo "Running brew bundle to recover applicattions"
-  brew bundle
-}
-
-install_mise() {
-  echo "Installing mise"
-
-  /bin/bash -c "$(curl https://mise.run | sh)"
-
-  echo "Mise instalation has finished"
-
-  echo "Now, let's install the tools"
-
-  mise install
-
-  echo "Tools were installed successfully using mise"
-}
-
-delete_current_files() {
-  echo "Deleting current files"
-  config=$HOME/.config
-  files=("$config/nvim/init.vim"
-         "$config/nvim/init.lua"
-         "$config/gitui/key_config.ron"
-         "$config/gh/hosts.yml"
-         "$config/gh/config.yml"
-         "$HOME/.zshrc"
-         "$HOME/.tmux.conf"
-         "$HOME/.gitconfig"
-         "$HOME/.p10k.zsh"
-         "$HOME/.fzf.zsh"
-         "$HOME/.tool-versions")
-
-  for file in ${files[*]}; do
-    echo "Deleting $file"
-   rm -rf "$file"
-  done
-
-  echo "All files were deleted"
-}
-
-restore_dotfiles() {
-  echo "Restoring dotfiles"
-  alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
-  dotfiles checkout
-
-  echo "Dotfiles restored"
+  echo "Installing everything from the Brewfile"
+  # one failing cask should not stop the rest of the setup
+  brew bundle --file="$HOME/Brewfile" || echo "Some Brewfile entries failed, check the output above"
 }
 
 install_oh_my_zsh() {
-  printf "Installing OhMyZSH\n"
-  
-  mv "$HOME/.zshrc" "$HOME/.zshrc.bkp"
-
-  brew install zsh
-  chsh -s /usr/local/bin/zsh
-
-  rm -rf "$HOME/.zshrc"
-  mv "$HOME/.zshrc.bkp" "$HOME/.zshrc"
-  
-  printf "OhMyZSH instalation finished\n"
-}
-
-install_powerlevel10k() {
-  printf "Installing terminal theme POWERLEVEL10K\n"
-
-  if [[ -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]]; then
-    printf "POWERLEVEL10K already installed, skipping this step"
-
-  else 
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-
-    printf "POWERLEVEL10K instalation finished\n"
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh My Zsh"
+    # KEEP_ZSHRC keeps the .zshrc from the dotfiles; zsh is already the default shell on macOS
+    ZSH="$HOME/.oh-my-zsh" RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
+
+  echo "Installing the zsh theme and plugins"
+  clone https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"
+  clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+  clone https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
+  clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+  clone https://github.com/jeffreytse/zsh-vi-mode "$ZSH_CUSTOM/plugins/zsh-vi-mode"
 }
 
-install_zsh_tools() {
-
-  printf "Installing ZSH plugins\n"
-
-  # autosuggestions
-  git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-
-  # auto completions
-  git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:=$HOME/.oh-my-zsh/custom}/plugins/zsh-completions"
-
-  # syntax highlighting
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-
-  printf "ZSH plugins installed\n"
+install_mise_tools() {
+  echo "Installing the tools from ~/.config/mise/config.toml"
+  mise install
 }
 
 install_tmux_tpm() {
-
-  echo "Installing Tmux package manager..."
-
-  git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-
-  echo "... Tmux package manager was installed"
+  echo "Installing Tmux package manager"
+  clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 }
 
 link_claude() {
@@ -119,10 +56,10 @@ link_claude() {
   mkdir -p "$HOME/.claude"
   for src in "$HOME/.config/claude-personal"/*; do
     dst="$HOME/.claude/$(basename "$src")"
-    [ -e "$dst" ] && [ ! -L "$dst" ] && mv "$dst" "$dst.bak"
+    # keep whatever was there before as .bak instead of overwriting it
+    if [ -e "$dst" ] && [ ! -L "$dst" ]; then mv "$dst" "$dst.bak"; fi
     ln -sfn "$src" "$dst"
   done
-  echo "Claude Code config linked"
 }
 
 echo "Hello, we will start to setup your new mac :)"
@@ -130,9 +67,7 @@ echo "Hello, we will start to setup your new mac :)"
 install_homebrew
 restore_brew
 install_oh_my_zsh
-install_powerlevel10k
-install_mise
-install_zsh_tools
+install_mise_tools
 install_tmux_tpm
 link_claude
 
