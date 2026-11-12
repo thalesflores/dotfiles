@@ -1,0 +1,1 @@
+{ "name": "git-guard", "version": "0.1.0", "description": "Blocks unsigned/AI-attributed commits, filter-branch, and pushes to branches another session claimed" }

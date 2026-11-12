@@ -1,0 +1,6 @@
+{
+  "hookSpecificOutput": {
+    "hookEventName": "UserPromptSubmit",
+    "additionalContext": "ANSWER SHAPE (hard limit, every reply): Line 1 = the answer or result, nothing before it. Then at most 4 bullets, one line each, only facts that change what the user does next. Last line = the one thing needed from the user, if anything. Max 5 lines of prose; code, commands and diffs do not count. Never: headers, tables, recaps, narrating your process, restating the question, lists of caveats, offers of extra info. Uncertain = one line saying so. When a full report is asked for, write it to a local .md file and reply with its path plus at most 3 lines."
+  }
+}
