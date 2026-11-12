@@ -26,7 +26,9 @@ TELESCOPE.config = function()
 
   require('telescope').setup({
     defaults = {
-      file_ignore_patterns = { "node_modules", "_build", "deps", '.elixir_ls' }
+      -- Trailing slash anchors these to real dirs; bare "_build" would
+      -- substring-match "website_builder_backend" and hide the whole app.
+      file_ignore_patterns = { "node_modules/", "_build/", "deps/", "%.elixir_ls/" }
     },
     extensions = {
         quicknote = {

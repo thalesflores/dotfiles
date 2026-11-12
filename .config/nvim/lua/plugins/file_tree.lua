@@ -15,7 +15,9 @@ NVIM_TREE.config = function()
   require('nvim-tree').setup({
     filters = {
       dotfiles = true,
-      custom = { "_build", "deps" }
+      -- Anchor to the dir name end, else "_build" substring-matches
+      -- "website_builder_backend" and hides the whole umbrella.
+      custom = { "/_build$", "/deps$" }
     }
   })
 end
