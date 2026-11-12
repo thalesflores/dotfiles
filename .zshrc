@@ -1,3 +1,11 @@
+# Enable Powerlevel10k instant prompt. Keep this block at the top of the file.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Homebrew on Apple Silicon (no-op when brew is already on PATH)
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
 ZSH_DISABLE_COMPFIX=true
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -16,7 +24,6 @@ plugins=(
   zsh-completions
   zsh-syntax-highlighting
   zsh-vi-mode
-  mise
 )
 
 # config autosuggestions color
@@ -35,43 +42,20 @@ alias ls="lsd"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias good_morning='~/.scripts/new_journal_entry.sh'
 alias reader='sioyek'
-alias debug='iex -S mix test $1 --timeout=99999999999'
 ##############################
 
-# use vim in terminal
-set -o vi
-
-# Yank to the system clipboard without using zsh-vi-mode
-function vi-yank-clipboard {
-    zle vi-yank
-   echo -n "$CUTBUFFER" | pbcopy -i
-}
-
-zle -N vi-yank-clipboard
-bindkey -M vicmd 'y' vi-yank-clipboard
-#######################################################
+# run a test inside iex, e.g. `debug test/foo_test.exs:42`
+debug() { iex -S mix test "$@" --timeout=99999999999; }
 
 # kep iex history in different session
 export ERL_AFLAGS="-kernel shell_history enabled"
 # compile new versions of erlang with docs
 export KERL_BUILD_DOCS=yes
 
-if (( ! ${fpath[(I)/usr/local/share/zsh/site-functions]} )); then
-  FPATH=/usr/local/share/zsh/site-functions:$FPATH
-fi
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
-
-export PATH="/usr/local/sbin:$PATH"
-
-export PATH=$PATH:/usr/local/sbin
 
 # fzf config
 FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude deps/ --exclude _build/ --exclude .elixir --exclude .git'
@@ -82,11 +66,6 @@ function zsh_vi_init() {
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 }
 
-# temporary fix to make the zsh-highlighting work
-function zvm_after_init() {
-  autoload add-zle-hook-widget
-  add-zle-hook-widget zle-line-pre-redraw zvm_zle-line-pre-redraw
-}
 # this function overwrite the de default one, enabling to yank to clipboard when using zsh_vi_mode
 function zvm_vi_yank() {
 	zvm_yank
@@ -96,14 +75,12 @@ function zvm_vi_yank() {
 
 zvm_after_init_commands+=(zsh_vi_init)
 
-export PATH="/usr/local/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
-
-# import scripts
-export PATH="~/.config/kindcompletion:$PATH"
-
 # 1Password completention
-eval "$(op completion zsh)"; compdef _op op
+command -v op >/dev/null && { eval "$(op completion zsh)"; compdef _op op; }
 
-eval "$(~/.local/bin/mise activate zsh)"
+command -v mise >/dev/null && eval "$(mise activate zsh)"
+
+# machine-local secrets/overrides, never committed
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
