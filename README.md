@@ -52,7 +52,9 @@ dotfiles branch -u origin/main main
 ### Running setup script
 
 The script `.config/setup.sh` is responsible to install Homebrew and all the applications from the `Brewfile` (Claude Code and terminal-browser included), setup `zsh` with Oh My Zsh, its plugins and theme.
-In addition, the script will install the tools from `~/.config/mise/config.toml` using `mise`, the TMUX plugin manager, and link the Claude Code config from `~/.config/claude-personal` into `~/.claude`
+In addition, the script will install the tools from `~/.config/mise/config.toml` using `mise`, the TMUX plugin manager, link the Claude Code config from `~/.config/claude-personal` into `~/.claude`, and apply the macOS settings (keyboard, trackpad, Dock and Finder) from `~/.config/macos.sh`. Some of these settings only apply after you log out and in again.
+
+To change one of the macOS settings, update it on `~/.config/macos.sh` and run `bash ~/.config/macos.sh`. To find the name of a setting, run `defaults read <domain>` before and after changing it on System Settings and compare both.
 
 It is safe to run it again, every step skips what is already installed.
 
