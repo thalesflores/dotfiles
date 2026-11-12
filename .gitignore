@@ -4,3 +4,4 @@
 
 .config/gh/hosts.yml
 .zshrc.local
+.gitconfig.local
